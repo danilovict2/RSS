@@ -15,6 +15,8 @@ type apiConfig struct {
 	DB *database.Queries
 }
 
+type authedHandler func(http.ResponseWriter, *http.Request, database.User)
+
 func main() {
 	godotenv.Load()
 
@@ -42,7 +44,9 @@ func main() {
 	})
 
 	mux.HandleFunc("POST /v1/users", cfg.createUser)
-	mux.HandleFunc("GET /v1/users", cfg.getUserByApiKey)
+	mux.HandleFunc("GET /v1/users", cfg.middlewareAuth(cfg.getUserByApiKey))
+
+	mux.HandleFunc("POST /v1/feeds", cfg.middlewareAuth(cfg.createFeed))
 	
 	server := http.Server{
 		Handler: mux,
