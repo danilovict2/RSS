@@ -39,3 +39,13 @@ func (cfg *apiConfig) createFeed(w http.ResponseWriter, r *http.Request, user da
 
 	respondWithJSON(w, feed, http.StatusOK)
 }
+
+func (cfg *apiConfig) getFeeds(w http.ResponseWriter, r *http.Request) {
+	feeds, err := cfg.DB.GetFeeds(r.Context())
+	if err != nil {
+		respondWithError(w, "Couldn't get all feeds", http.StatusInternalServerError)
+		return
+	}
+
+	respondWithJSON(w, feeds, http.StatusOK)
+}

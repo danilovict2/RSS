@@ -47,6 +47,7 @@ func main() {
 	mux.HandleFunc("GET /v1/users", cfg.middlewareAuth(cfg.getUserByApiKey))
 
 	mux.HandleFunc("POST /v1/feeds", cfg.middlewareAuth(cfg.createFeed))
+	mux.HandleFunc("GET /v1/feeds", cfg.getFeeds)
 	
 	server := http.Server{
 		Handler: mux,
